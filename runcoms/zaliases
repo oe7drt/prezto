@@ -1,0 +1,109 @@
+# dominic reich aliases file
+# https://dominicreich.com/
+#
+
+[ -x /usr/bin/pydf ] && alias df='/usr/bin/pydf' || alias df='df -h'
+
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias dr='cd ~/Sites/oe7drt-hugo'
+  alias fg='cd ~/OneDrive/Amateurfunk/Geraete/Funkgeraete'
+  alias afu='cd ~/OneDrive/Amateurfunk'
+  alias hs="hugo server -DEF --cleanDestinationDir --bind 0.0.0.0 -b http://$(/sbin/ifconfig | grep 'inet 192'| awk '{ print $2 }')/"
+  alias hsf="hugo server -p 8080 -DEF --cleanDestinationDir --bind 0.0.0.0 -b http://$(/sbin/ifconfig | grep 'inet 192'| awk '{ print $2 }')/"
+  # Jekyll webdev aliases
+  alias js='JEKYLL_ENV="production" bundle exec jekyll serve'
+  alias jsc='JEKYLL_ENV="production" bundle exec jekyll serve --unpublished --config _config.yml,_config.dev.yml'
+  alias jcc='JEKYLL_ENV="production" bundle exec jekyll clean'
+  alias jb='JEKYLL_ENV="production" bundle exec jekyll build'
+  alias jsp='JEKYLL_ENV="production" bundle exec jekyll serve'
+  alias jd='JEKYLL_ENV="debug" bundle exec jekyll build --config _config.yml,_config.dev.yml --verbose'
+
+  alias dt='sudo dmesg | tail'
+  alias findereset='sudo find / -name .DS_Store -delete; killall Finder'
+
+  # I'm only on MacOS where I don't have vlc as executable file
+  #alias sr='vlc -I dummy screen:// --screen-fps=25 --quiet --sout "#transcode{vcodec=h264,vb072}:standard{access=file,mux=mp4,dst="vlc-output-terminal.mp4"}"'
+  alias yl='youtube-dl -x --audio-format mp3 --embed-thumbnail'
+elif [[ "$OSTYPE" == linux-gnueabihf ]]; then
+  # Raspberry Pi Aliases
+  # (we need to move them into an if statement some day...)
+  #alias dmrgw="sudo -u mmdvm screen -r DMRGW"
+  alias mmdvm="sudo -u mmdvm screen -r MMDVMHost"
+  alias ysf="sudo -u mmdvm screen -r YSFGateway"
+  #alias mmdvm="sudo screen -r MMDVMHost"
+  #alias dapnet="sudo -u mmdvm screen -r DAPNETGW"
+  alias yref="sudo -u mmdvm screen -r YSFReflector"
+  alias scls="sudo -u mmdvm screen -ls;sudo screen -ls"
+  alias ysf="sudo -u mmdvm screen -r YSFReflector"
+  #alias mm="tmux -u new-session -A -s HotSpot 'sudo -u mmdvm screen -r DMRGW' \; split-window 'sudo -u mmdvm screen -r MMDVM' \; rename-window MMDVM-Screen"
+  #alias mon="multitail /var/log/mmdvm/*-`date +%Y-%m-%d.log`"
+  #alias mon="multitail /var/log/mmdvm/[DMR][MMDVM]*-`date +%Y-%m-%d.log`"
+  alias mon="multitail `eval 'ls -1rt /var/log/mmdvm/MMDVM-*|tail -n1'`"
+  #alias mon2="multitail `eval 'ls -1rt /var/log/mmdvm/MMDVM-*|tail -n1'` `eval 'ls -1rt /var/log/mmdvm/YSFGateway-*|tail -n1'`"
+  #alias mon3="multitail `eval 'ls -1rt /var/log/mmdvm/MMDVM-*|tail -n1'` `eval 'ls -1rt /var/log/mmdvm/YSFGateway-*|tail -n1'` `eval 'ls -1rt /var/log/mmdvm/DAPNETGateway-*|tail -n1'`"
+  alias monn="multitail /var/log/mmdvm/*-`date -u +%Y-%m-%d.log`"
+  #tmux -u new-session -A -s HotSpot 'sudo -u mmdvm screen -r DMRGW' \; new-window 'sudo -u mmdvm screen -r MMDVM'
+  alias temp="vcgencmd measure_temp|cut -d= -f2"
+fi
+
+alias digg='dig +noall +answer'
+# gg() { git grep "$*"; }
+
+function opti() {
+  if (( $# == 0 ))
+  then echo usage: opti [files...]; fi
+  for i; do
+    optipng -nb -nc "$i";
+    advpng -z4 "$i";
+    pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB -rem time -ow "$i";
+  done
+}
+
+function jopti() {
+  if (( $# == 0 ))
+  then echo usage: jopti [files...]; fi
+  for i; do
+    jpegtran -copy none -optimize -progressive -outfile $i $i;
+  done
+}
+
+function imgconv() {
+  if (( $# == 0 ))
+  then echo usage: imgconv [files...]; fi
+  for i; do
+    convert $i -resize 50% -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG \
+      -colorspace RGB ${i:t:r}@0,5.jpg;
+    convert $i -resize 25% -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG \
+      -colorspace RGB ${i:t:r}@0,25.jpg;
+  done
+}
+
+alias os="picocom -b 115200 -d 8 -y n -p 1 /dev/tty.usbmodemDADCB8841"
+
+#function rem_mmdvm() {
+#  tmux \
+#    -u new-session -A -s MMDVM 'ssh -t hs "sudo -u mmdvm screen -r DMRGW"' \; \
+#    split-window 'ssh -t hs "sudo -u mmdvm screen -r MMDVM"'
+#}
+
+# Don't define aliases in plain Bourne shell
+#[ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ] || return 0
+#alias mc='. /usr/libexec/mc/mc-wrapper.sh'
+
+# Screen and Tmux alike
+alias sc='screen -DR Hooray'
+alias tm='tmux -u new-session -A -s Eve'
+
+alias la='ls -lah'
+alias lad='ls -lah|more'
+alias lld='ls -lh|more'
+alias ducks='du -cks * | sort -rn | head'
+#alias duckss='du -chsx * | sort -rh | head -10'
+#alias duckss='for i in G M K; do du -ah | grep [0-9]$i | sort -nr -k 1; done | head -n 11'
+
+alias confcat="sed -e 's/#.*//;/^\s*$/d' "$@""
+
+if [[ $EUID -ne 0 ]]; then
+  alias admin='sudo su'
+fi
+
