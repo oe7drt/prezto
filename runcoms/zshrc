@@ -11,3 +11,71 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+
+# Enable Powerlevel10k instant prompt.
+# Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+unsetopt autocd
+setopt clobber
+
+# Set SSH to use gpg-agent
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
+fi
+
+# new (to me) methond to check for availability of commands
+# taken from mrusme dotfiles repo https://github.com/mrusme/dotfiles
+export OS="$(uname | tr '[:upper:]' '[:lower:]')"
+
+function __is_available {
+  prog="${1}"
+  os="${2}"
+  forcecheck="${3}"
+
+  if [ "${os}" != "" ] && [ "${os}" != "${OS}" ]
+  then
+    return 1
+  fi
+
+  if [ "${os}" = "" ] || [ "${os}" = "${OS}" ]
+  then
+    if [ "${forcecheck}" != "true" ]
+    then
+      case "${HOST}" in
+        "cbrspc7")
+          return 0
+          ;;
+        "d3lt4")
+          return 0
+          ;;
+      esac
+    fi
+  fi
+
+  type "${prog}" > /dev/null
+  return "$?"
+}
+
+# MPD (would not know how to check if binary exists in .zprofile
+# as is would get loaded after .zshrc
+__is_available mpd \
+&& export MPD_HOST='/home/dominic/.config/mpd/socket'
+
+# Okay I leave this for reference, I'm not sure any more what
+# this actually does. I think it set a terminal title or
+# something like that...
+# precmd() {
+#   print -Pn "\e]133;A\e\\"
+# }
+
+[[ -f ~/.zaliases ]] && source ~/.zaliases
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+

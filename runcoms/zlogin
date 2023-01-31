@@ -21,8 +21,13 @@
 if [[ -o INTERACTIVE && -t 2 ]]; then
 
   # Print a random, hopefully interesting, adage.
-  if (( $+commands[fortune] )); then
-    fortune -s
+  # if (( $+commands[fortune] )); then
+  #   fortune -s
+  #   print
+  # fi
+
+  if (( $+commands[randomquote.pl] )); then
+    randomquote.pl
     print
   fi
 

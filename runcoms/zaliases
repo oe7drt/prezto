@@ -1,0 +1,109 @@
+# dominics alias file
+# arch linux - polaris
+# oe7drt.com / "2023-01-31T02:14:41+0100"
+
+alias la='ls -lah'
+
+alias ducks='du -cks * | sort -rn | head'
+alias confcat="sed -e 's/#.*//;/^\s*$/d' "$@""
+
+alias sc='screen -DR Hooray'
+alias tm='tmux -u new-session -A -s Eve'
+
+[[ "$EUID" -ne 0 ]] \
+&& alias admin='sudo su' \
+&& alias dmesg='sudo dmesg' \
+&& alias dt='dmesg | tail'
+
+[[ -d ~/sites/oe7drt-website ]] \
+&& alias dr='cd ~/sites/oe7drt-website'
+
+__is_available hugo \
+&& alias hs="hugo server -DEF --cleanDestinationDir --bind 0.0.0.0 --baseURL http://polaris.lan/"
+
+__is_available blacklist \
+&& alias bl='blacklist -a'
+
+__is_available nvim \
+&& alias vi=nvim \
+&& alias vim=nvim
+
+__is_available picocom \
+&& alias os='picocom -b 115200 -d 8 -y n -p 1 /dev/tty.usbmodemDADCB8841'
+
+__is_available yt-dlp \
+&& alias yl='yt-dlp -x --audio-format mp3 --embed-thumbnail --embed-metadata'
+
+function mvidgif {
+  if (( $# == 0 ))
+  then echo usage: mastovidgif [file]; fi
+  for i; do
+    ffmpeg -i "$i" -an -vf \
+      "fps=8,scale=iw*2/3:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" ${i:t:r}_mastodon.gif
+  done
+}
+
+function mvidgif_fullsize {
+  if (( $# == 0 ))
+  then echo usage: mastovidgif [file]; fi
+  for i; do
+    ffmpeg -i "$i" -an -vf \
+      "fps=8,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" ${i:t:r}_mastodon_fullsize.gif
+  done
+}
+
+function mvid {
+  if (( $# == 0 ))
+  then echo usage: mastovid [file]; fi
+  for i; do
+    ffmpeg -i "$i" -an -vcodec libvpx-vp9 -vf \
+      "scale=iw/2*3:-1:flags=lanczos" -crf 31 -b:v 1800k -quality good -speed 0 ${i:t:r}_mastodon.webm
+  done
+}
+
+function mvid_fullsize {
+  if (( $# == 0 ))
+  then echo usage: mastovid [file]; fi
+  for i; do
+    ffmpeg -i "$i" -an -vcodec libvpx-vp9 -crf 31 -b:v 1800k \
+      -quality good -speed 0 ${i:t:r}_mastodon_fullsize.webm
+  done
+}
+
+function opti {
+  if (( $# == 0 ))
+  then echo usage: opti [files...]; fi
+  for i; do
+    optipng -nb -nc "$i";
+    advpng -z4 "$i";
+    pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB \
+      -rem time -ow "$i";
+  done
+}
+
+function jopti {
+  if (( $# == 0 ))
+  then echo usage: jopti [files...]; fi
+  for i; do
+    jpegtran -copy none -optimize -progressive -outfile $i $i;
+  done
+}
+
+function imgconv {
+  # Create 100% image crop from the center pic with half
+  # the size of the image
+  if (( $# == 0 ))
+  then echo usage: imgconv [files...]; fi
+  for i; do
+    convert $i -resize 50% -sampling-factor 4:2:0 -strip \
+      -quality 85 -interlace JPEG -colorspace RGB ${i:t:r}@0,5.jpg;
+    convert $i -resize 25% -sampling-factor 4:2:0 -strip \
+      -quality 85 -interlace JPEG -colorspace RGB ${i:t:r}@0,25.jpg;
+  done
+}
+
+function ptgui() {
+  cd $HOME/bin/PTGui
+  ./PTGui
+}
+
