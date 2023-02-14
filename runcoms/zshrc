@@ -62,6 +62,13 @@ function __is_available {
   return "$?"
 }
 
+# zeit & geld
+__is_available zeit \
+&& export ZEIT_DB=~/.config/zeit/database
+
+__is_available geld \
+&& export GELD_DB=~/.config/geld/database
+
 # MPD (would not know how to check if binary exists in .zprofile
 # as is would get loaded after .zshrc
 __is_available mpd \

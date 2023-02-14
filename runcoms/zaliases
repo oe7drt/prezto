@@ -34,6 +34,17 @@ __is_available picocom \
 __is_available yt-dlp \
 && alias yl='yt-dlp -x --audio-format mp3 --embed-thumbnail --embed-metadata'
 
+__is_available exa \
+&& alias ls=exa
+
+#__is_available git \
+#&& alias config='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
+
+__is_available git \
+&& function config {
+  git --git-dir=$HOME/dotfiles --work-tree=$HOME $@
+}
+
 function mvidgif {
   if (( $# == 0 ))
   then echo usage: mastovidgif [file]; fi
