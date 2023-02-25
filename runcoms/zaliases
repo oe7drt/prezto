@@ -34,11 +34,13 @@ __is_available picocom \
 __is_available yt-dlp \
 && alias yl='yt-dlp -x --audio-format mp3 --embed-thumbnail --embed-metadata'
 
-__is_available exa \
-&& alias ls=exa
+#__is_available exa \
+#&& alias ls=exa
 
-#__is_available git \
-#&& alias config='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
+__is_available lsd \
+&& function  ls {
+  lsd $argv
+}
 
 __is_available git \
 && function config {
@@ -116,5 +118,26 @@ function imgconv {
 function ptgui() {
   cd $HOME/bin/PTGui
   ./PTGui
+}
+
+function f {
+  FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' FZF_DEFAULT_OPTS="--color=bg+:#302D41,bg:#1E1E2E,spinner:#F8BD96,hl:#F28FAD --color=fg:#D9E0EE,header:#F28FAD,info:#DDB6F2,pointer:#F8BD96 --color=marker:#F8BD96,fg+:#F2CDCD,prompt:#DDB6F2,hl+:#F28FAD --preview 'bat --style=numbers --color=always --line-range :500 {}'" fzf --height 60% --layout reverse --info inline --border --color 'border:#b48ead' $argv
+}
+
+
+function mpv {
+  env __NV_PRIME_RENDER_OFFLOAD=1 mpv $argv
+}
+
+function n {
+  neofetch $argv
+}
+
+function r {
+  ranger $argv
+}
+
+function yl {
+  yt-dlp -x --audio-format mp3 --embed-thumbnail $argv
 }
 
