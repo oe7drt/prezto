@@ -14,6 +14,8 @@
 
 # Color output (auto set to 'no' on dumb terminals).
 zstyle ':prezto:*:*' color 'yes'
+# diasble colors for `ls` because I replace it later with `lsd`
+zstyle ':prezto:module:utility:ls' color 'no'
 
 # Add additional directories to load prezto modules from
 # zstyle ':prezto:load' pmodule-dirs $HOME/.zprezto-contrib
@@ -37,12 +39,10 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'git' \
   'gpg' \
-  'pacman' \
   'completion' \
   'syntax-highlighting' \
   'history-substring-search' \
-  'autosuggestions' \
-  'prompt'
+  'autosuggestions'
 
 #
 # Autosuggestions
@@ -74,7 +74,7 @@ zstyle ':prezto:module:editor' key-bindings 'vi'
 # zstyle ':prezto:module:editor' dot-expansion 'yes'
 
 # Allow the zsh prompt context to be shown.
-zstyle ':prezto:module:editor' ps-context 'yes'
+# zstyle ':prezto:module:editor' ps-context 'yes'
 
 #
 # Git

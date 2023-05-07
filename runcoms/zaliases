@@ -2,7 +2,10 @@
 # arch linux - polaris
 # oe7drt.com / "2023-01-31T02:14:41+0100"
 
-alias la='ls -lah'
+#alias la='ls -lah'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 
 alias ducks='du -cks * | sort -rn | head'
 alias confcat="sed -e 's/#.*//;/^\s*$/d' "$@""
@@ -10,16 +13,25 @@ alias confcat="sed -e 's/#.*//;/^\s*$/d' "$@""
 alias sc='screen -DR Hooray'
 alias tm='tmux -u new-session -A -s Eve'
 
-[[ "$EUID" -ne 0 ]] \
+[[ "$EUID" -ne 0 ]] && __is_available sudo \
 && alias admin='sudo su' \
 && alias dmesg='sudo dmesg' \
 && alias dt='dmesg | tail'
 
+[[ "$EUID" -ne 0 ]] && __is_available doas \
+&& alias admin='doas su' \
+&& alias dmesg='doas dmesg' \
+&& alias dt='doas dmesg | tail'
+
 [[ -d ~/sites/oe7drt-website ]] \
 && alias dr='cd ~/sites/oe7drt-website'
 
+# [[ -d /usr/ports ]] \
+# && alias up='cd /usr/ports'
+
 __is_available hugo \
-&& alias hs="hugo server -DEF --cleanDestinationDir --bind 0.0.0.0 --baseURL http://polaris.lan/"
+&& LIP=$(ifconfig | grep 192 | cut -d' ' -f 2) \
+&& alias hs="hugo server -DEF --cleanDestinationDir --bind 0.0.0.0 --baseURL http://${LIP}/"
 
 __is_available blacklist \
 && alias bl='blacklist -a'
@@ -27,6 +39,9 @@ __is_available blacklist \
 __is_available nvim \
 && alias vi=nvim \
 && alias vim=nvim
+
+__is_available X \
+&& alias x=startx
 
 __is_available picocom \
 && alias os='picocom -b 115200 -d 8 -y n -p 1 /dev/tty.usbmodemDADCB8841'
