@@ -16,12 +16,12 @@ alias tm='tmux -u new-session -A -s Eve'
 [[ "$EUID" -ne 0 ]] && __is_available sudo \
 && alias admin='sudo su' \
 && alias dmesg='sudo dmesg' \
-&& alias dt='dmesg | tail'
+&& alias dt='dmesg | tail -n 15'
 
 [[ "$EUID" -ne 0 ]] && __is_available doas \
 && alias admin='doas su' \
 && alias dmesg='doas dmesg' \
-&& alias dt='doas dmesg | tail'
+&& alias dt='doas dmesg | tail -n 15'
 
 [[ -d ~/sites/oe7drt-website ]] \
 && alias dr='cd ~/sites/oe7drt-website'
@@ -57,9 +57,9 @@ __is_available lsd \
   lsd $argv
 }
 
-__is_available git \
-&& function config {
-  git --git-dir=$HOME/dotfiles --work-tree=$HOME $@
+__is_available git && [[ -d ~/.cfg ]] \
+&& function aconf {
+  git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
 
 function mvidgif {
@@ -141,7 +141,8 @@ function f {
 
 
 function mpv {
-  env __NV_PRIME_RENDER_OFFLOAD=1 mpv $argv
+  #env __NV_PRIME_RENDER_OFFLOAD=1 mpv $argv
+  mpv --vo=gpu --hwdec=vaapi $argv
 }
 
 function n {
