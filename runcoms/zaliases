@@ -21,7 +21,8 @@ alias tm='tmux -u new-session -A -s Eve'
 [[ "$EUID" -ne 0 ]] && __is_available doas \
 && alias admin='doas su' \
 && alias dmesg='doas dmesg' \
-&& alias dt='doas dmesg | tail -n 15'
+&& alias dt='doas dmesg | tail -n 15' \
+&& alias dosa='doas'
 
 [[ -d ~/sites/oe7drt-website ]] \
 && alias dr='cd ~/sites/oe7drt-website'
@@ -49,12 +50,22 @@ __is_available picocom \
 __is_available yt-dlp \
 && alias yl='yt-dlp -x --audio-format mp3 --embed-thumbnail --embed-metadata'
 
-#__is_available exa \
-#&& alias ls=exa
+__is_available exa \
+&& unalias l && unalias la \
+&& alias l='ls -1a' && alias la='ll -a' \
+&& function ls {
+  exa --color-scale --icons --group-directories-first $argv
+} \
+&& function gls {
+  exa --icons --group-directories-first --git-ignore $argv
+} \
+&& function gll {
+  exa --long --color-scale --icons --group-directories-first --git-ignore --git $argv
+}
 
 __is_available lsd \
 && function  ls {
-  lsd $argv
+  lsd --group-directories-first $argv
 }
 
 __is_available git && [[ -d ~/.cfg ]] \
@@ -142,7 +153,7 @@ function f {
 
 function mpv {
   #env __NV_PRIME_RENDER_OFFLOAD=1 mpv $argv
-  mpv --vo=gpu --hwdec=vaapi $argv
+  env mpv --vo=gpu --hwdec=vaapi $argv
 }
 
 function n {
