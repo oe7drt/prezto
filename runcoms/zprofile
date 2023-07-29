@@ -26,9 +26,11 @@ fi
 if [[ -z "$PAGER" ]]; then
   export PAGER='less'
 fi
-if [[ -z "$BAT_PAGER" ]]; then
-  export BAT_PAGER='less -RF'
-fi
+# BAT_PAGER does not work on OpenBSD right now...
+# (displays nothing at all with this VARIABLE set)
+# if [[ -z "$BAT_PAGER" ]]; then
+#   export BAT_PAGER='less -RF'
+# fi
 
 #
 # Language
@@ -82,3 +84,4 @@ if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
 
+export FETCH_CMD="/usr/local/bin/curl -L -s -q -N"
