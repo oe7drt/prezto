@@ -73,6 +73,11 @@ __is_available git && [[ -d ~/.cfg ]] \
   git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
 
+__is_available lazygit && [[ -d ~/.cfg ]] \
+&& function lconf {
+  lazygit --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
+}
+
 function mvidgif {
   if (( $# == 0 ))
   then echo usage: mastovidgif [file]; fi
