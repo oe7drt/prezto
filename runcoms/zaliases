@@ -119,7 +119,7 @@ function opti {
   then echo usage: opti [files...]; fi
   for i; do
     optipng -nb -nc "$i";
-    advpng -z4 "$i";
+    # advpng -z4 "$i";
     pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB \
       -rem time -ow "$i";
   done
