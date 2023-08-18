@@ -11,6 +11,7 @@ alias ducks='du -cks * | sort -rn | head'
 alias confcat="sed -e 's/#.*//;/^\s*$/d' "$@""
 
 alias sc='screen -DR Hooray'
+alias dmr='screen -DR DMR'
 alias tm='tmux -u new-session -A -s Eve'
 
 [[ "$EUID" -ne 0 ]] && __is_available sudo \
