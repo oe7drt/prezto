@@ -65,6 +65,10 @@ path=(
 
 [[ -d $HOME/go ]] && export GOPATH="$HOME/go"
 
+# OpenBSD snapshots/current...
+export PKG_PATH=http://mirror.hs-esslingen.de/pub/OpenBSD/snapshots/packages/amd64
+export FETCH_CMD="/usr/local/bin/curl -L -s -q -N"
+
 # still here for reference, used to need that on KDE
 # export SSH_ASKPASS='/usr/bin/ksshaskpass'
 
@@ -85,4 +89,3 @@ if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
 
-export FETCH_CMD="/usr/local/bin/curl -L -s -q -N"

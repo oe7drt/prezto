@@ -16,9 +16,9 @@ fi
 # Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 unsetopt autocd
 setopt clobber
@@ -77,6 +77,10 @@ __is_available mpd \
 # precmd() {
 #   print -Pn "\e]133;A\e\\"
 # }
+
+fpath=($HOME/.zcomp $fpath)
+
+compinit
 
 [[ -f ~/.zaliases ]] && source ~/.zaliases
 
