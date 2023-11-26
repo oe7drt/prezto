@@ -88,6 +88,12 @@ zstyle ':prezto:module:editor' key-bindings 'vi'
 zstyle ':prezto:module:git:alias' skip 'yes'
 
 #
+# Utility
+#
+zstyle ':prezto:module:utility:ls' dirs-first 'yes'
+zstyle ':prezto:module:utility:ls' color 'yes'
+
+#
 # GNU Utility
 #
 
