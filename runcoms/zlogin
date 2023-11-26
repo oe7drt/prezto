@@ -26,9 +26,9 @@ if [[ -o INTERACTIVE && -t 2 ]]; then
   #   print
   # fi
 
-  if (( $+commands[randomquote.pl] )); then
-    randomquote.pl
-    print
-  fi
+  # if (( $+commands[randomquote.pl] )); then
+  #   randomquote.pl
+  #   print
+  # fi
 
 fi >&2
