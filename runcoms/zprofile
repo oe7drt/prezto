@@ -64,7 +64,9 @@ path=(
   $path
 )
 
-[[ -d $HOME/go ]] && export GOPATH="$HOME/go"
+[[ -d $HOME/go ]] && export GOPATH="${HOME}/go"
+[[ -d ${GOPATH}/bin ]] && export GOBIN="${GOPATH}/bin"
+[[ -d $HOME/.tmac ]] && export GROFF_TMAC_PATH="$HOME/.tmac"
 
 # OpenBSD snapshots/current...
 export PKG_PATH="http://mirror.hs-esslingen.de/pub/OpenBSD/snapshots/packages/amd64"
