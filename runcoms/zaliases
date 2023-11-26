@@ -33,7 +33,7 @@ alias tm='tmux -u new-session -A -s Eve'
 
 __is_available hugo \
 && LIP=$(ifconfig | grep 192 | cut -d' ' -f 2) \
-&& alias hs="hugo server -DEF --cleanDestinationDir --printPathWarnings --printUnusedTemplates --bind 0.0.0.0 --baseURL http://${LIP}/"
+&& alias hs="hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://${LIP}/"
 
 __is_available blacklist \
 && alias bl='blacklist -a'
@@ -65,14 +65,19 @@ __is_available eza \
 }
 
 __is_available lsd \
-&& function ls {
-  lsd --group-directories-first $argv
-}
+&& alias ls='lsd --group-directories-first -v'
+# && function ls {
+#   # list directories first and sort by version (1-$name before 10-$name)
+#   lsd --group-directories-first -v $argv
+# }
 
 __is_available git && [[ -d ~/.cfg ]] \
 && function aconf {
   git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
 }
+
+__is_available lazygit \
+&& alias lg='lazygit'
 
 __is_available lazygit && [[ -d ~/.cfg ]] \
 && function lconf {
