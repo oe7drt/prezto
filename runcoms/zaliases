@@ -32,8 +32,8 @@ alias tm='tmux -u new-session -A -s Eve'
 # && alias up='cd /usr/ports'
 
 __is_available hugo \
-&& LIP=$(ifconfig | grep 192 | cut -d' ' -f 2) \
-&& alias hs="hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://${LIP}/"
+&& function runit { eval $1; } \
+&& alias hs="""hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "/sbin/ifconfig | grep broadcast | head -1 | awk '{ print \$2 }'")"""
 
 __is_available blacklist \
 && alias bl='blacklist -a'
