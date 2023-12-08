@@ -17,13 +17,15 @@ alias tm='tmux -u new-session -A -s Eve'
 [[ "$EUID" -ne 0 ]] && __is_available sudo \
 && alias admin='sudo su' \
 && alias dmesg='sudo dmesg' \
-&& alias dt='dmesg | tail -n 15'
+&& alias dt='dmesg | tail -n 15' \
+&& alias dm='tail -f /var/log/messages'
 
 [[ "$EUID" -ne 0 ]] && __is_available doas \
+&& alias dosa='doas' \
 && alias admin='doas su' \
 && alias dmesg='doas dmesg' \
 && alias dt='doas dmesg | tail -n 15' \
-&& alias dosa='doas'
+&& alias dm='tail -f /var/log/messages'
 
 [[ -d ~/sites/oe7drt-website ]] \
 && alias dr='cd ~/sites/oe7drt-website'
