@@ -165,8 +165,8 @@ zstyle ':prezto:module:history' savehist 10000
 # zstyle ':prezto:module:prompt' theme 'sorin'
 # zstyle ':prezto:module:prompt' theme 'pure'
 # zstyle ':prezto:module:prompt' theme 'paradox'
-zstyle ':prezto:module:prompt' theme 'powerlevel10k'
-# zstyle :prezto:module:prompt theme off
+# zstyle ':prezto:module:prompt' theme 'powerlevel10k'
+zstyle :prezto:module:prompt theme off
 
 # Customize the 'pure' prompt a bit
 zstyle ':prompt:pure:git:stash' show 'yes'
