@@ -69,8 +69,8 @@ __is_available eza \
 __is_available lsd \
 && alias ols='/bin/ls' && alias oll='/bin/ls -l' \
 && alias ls='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name' \
-&& alias lli='ls --blocks=permission,user,size,date,name,inode' \
-&& alias llg='ls --blocks=permission,user,size,date,name,git'
+&& alias lli='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name,inode' \
+&& alias llg='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name,git'
 # && function ls {
 #   # list directories first and sort by version (1-$name before 10-$name)
 #   lsd --group-directories-first -v $argv
