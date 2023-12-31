@@ -55,8 +55,10 @@ typeset -gU cdpath fpath mailpath path
 
 # Set the list of directories that Zsh searches for programs.
 path=(
+  $HOME/.config/emacs/bin(N)
   $HOME/.cargo/bin(N)
   $HOME/go/bin(N)
+  $HOME/.local/share/gem/ruby/3.2/bin(N)
   $HOME/.yarn/bin(N)
   $HOME/{,s}bin(N)
   $HOME/.local/{,s}bin(N)
@@ -70,13 +72,10 @@ path=(
 [[ -d $HOME/.tmac ]] && export GROFF_TMAC_PATH="$HOME/.tmac"
 
 # OpenBSD snapshots/current...
-export PKG_PATH="http://mirror.hs-esslingen.de/pub/OpenBSD/snapshots/packages/amd64"
+# export PKG_PATH="http://mirror.hs-esslingen.de/pub/OpenBSD/snapshots/packages/amd64"
+export PKG_PATH="http://ftp.nluug.nl/OpenBSD/snapshots/packages/amd64"
 export FETCH_CMD="/usr/local/bin/curl -L -s -q -N"
 export CVSROOT="anoncvs@ftp.hostserver.de:/cvs"
-
-# ZEIT & GELD
-export ZEIT_DB="/home/dominic/.config/zeit.db"
-export GELD_DB="/home/dominic/.config/geld.db"
 
 # still here for reference, used to need that on KDE
 # export SSH_ASKPASS='/usr/bin/ksshaskpass'
