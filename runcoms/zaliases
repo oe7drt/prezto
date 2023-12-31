@@ -67,7 +67,9 @@ __is_available eza \
 }
 
 __is_available lsd \
-&& alias ls='lsd --group-directories-first -v'
+&& alias ls='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name' \
+&& alias lli='ls --blocks=permission,user,size,date,name,inode' \
+&& alias llg='ls --blocks=permission,user,size,date,name,git'
 # && function ls {
 #   # list directories first and sort by version (1-$name before 10-$name)
 #   lsd --group-directories-first -v $argv
@@ -95,8 +97,10 @@ __is_available bat \
 }
 
 function mvidgif {
-  if (( $# == 0 ))
-  then echo usage: mastovidgif [file]; fi
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
   for i; do
     ffmpeg -i "$i" -an -vf \
       "fps=8,scale=iw*2/3:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" ${i:t:r}_mastodon.gif
@@ -104,8 +108,10 @@ function mvidgif {
 }
 
 function mvidgif_fullsize {
-  if (( $# == 0 ))
-  then echo usage: mastovidgif [file]; fi
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
   for i; do
     ffmpeg -i "$i" -an -vf \
       "fps=8,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" ${i:t:r}_mastodon_fullsize.gif
@@ -113,37 +119,71 @@ function mvidgif_fullsize {
 }
 
 function mvid {
-  if (( $# == 0 ))
-  then echo usage: mastovid [file]; fi
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
   for i; do
     ffmpeg -i "$i" -an -vcodec libvpx-vp9 -vf \
-      "scale=iw/2*3:-1:flags=lanczos" -crf 31 -b:v 1800k -quality good -speed 0 ${i:t:r}_mastodon.webm
+      "scale=iw/2*3:-1:flags=lanczos" -crf 31 -b:v 1800k \
+      -quality good -speed 0 ${i:t:r}_mastodon.webm
   done
 }
 
 function mvid_fullsize {
-  if (( $# == 0 ))
-  then echo usage: mastovid [file]; fi
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
   for i; do
     ffmpeg -i "$i" -an -vcodec libvpx-vp9 -crf 31 -b:v 1800k \
       -quality good -speed 0 ${i:t:r}_mastodon_fullsize.webm
   done
 }
 
+function smallvid {
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
+  for i; do
+    ffmpeg -y -i "$i" -vf "unsharp=5:5:1.0:5:5:0.0" -an -c:v libx264 \
+      -preset slow -b:v 10000k -pass 1 -f mp4 /dev/null
+    ffmpeg -y -i "$i" -vf "unsharp=5:5:1.0:5:5:0.0" -an -c:v libx264 \
+      -preset slow -b:v 10000k -pass 2 "${i:t:r}_small.mp4"
+    rm -if ffmpeg2pass-0.log*
+  done
+}
+
+function svid {
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
+  for i; do
+    ffmpeg -y -i "$i" -c:v libx264 -crf 23 -c:a aac -movflags faststart \
+      -maxrate 2M -bufsize 2M ${i:t:r}-small.mp4
+  done
+}
+
 function opti {
-  if (( $# == 0 ))
-  then echo usage: opti [files...]; fi
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
   for i; do
     optipng -nb -nc "$i";
-    # advpng -z4 "$i";
+    advpng -z4 "$i";
     pngcrush -rem gAMA -rem alla -rem cHRM -rem iCCP -rem sRGB \
       -rem time -ow "$i";
   done
 }
 
 function jopti {
-  if (( $# == 0 ))
-  then echo usage: jopti [files...]; fi
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
   for i; do
     jpegtran -copy none -optimize -progressive -outfile $i $i;
   done
@@ -152,8 +192,10 @@ function jopti {
 function imgconv {
   # Create 100% image crop from the center pic with half
   # the size of the image
-  if (( $# == 0 ))
-  then echo usage: imgconv [files...]; fi
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
   for i; do
     convert $i -resize 50% -sampling-factor 4:2:0 -strip \
       -quality 85 -interlace JPEG -colorspace RGB ${i:t:r}@0,5.jpg;
@@ -170,7 +212,6 @@ function ptgui() {
 function f {
   FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git' FZF_DEFAULT_OPTS="--color=bg+:#302D41,bg:#1E1E2E,spinner:#F8BD96,hl:#F28FAD --color=fg:#D9E0EE,header:#F28FAD,info:#DDB6F2,pointer:#F8BD96 --color=marker:#F8BD96,fg+:#F2CDCD,prompt:#DDB6F2,hl+:#F28FAD --preview 'bat --style=numbers --color=always --line-range :500 {}'" fzf --height 60% --layout reverse --info inline --border --color 'border:#b48ead' $argv
 }
-
 
 function mpv {
   #env __NV_PRIME_RENDER_OFFLOAD=1 mpv $argv
@@ -189,3 +230,6 @@ function yl {
   yt-dlp -x --audio-format mp3 --embed-thumbnail $argv
 }
 
+function ala {
+  alacritty --hold -e $argv
+}
