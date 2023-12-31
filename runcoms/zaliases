@@ -104,7 +104,8 @@ function mvidgif {
   fi
   for i; do
     ffmpeg -i "$i" -an -vf \
-      "fps=8,scale=iw*2/3:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" ${i:t:r}_mastodon.gif
+      "fps=8,scale=iw*2/3:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
+      ${i:t:r}_masto.gif
   done
 }
 
@@ -115,7 +116,8 @@ function mvidgif_fullsize {
   fi
   for i; do
     ffmpeg -i "$i" -an -vf \
-      "fps=8,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" ${i:t:r}_mastodon_fullsize.gif
+      "fps=8,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" \
+      ${i:t:r}-masto-full.gif
   done
 }
 
@@ -127,7 +129,7 @@ function mvid {
   for i; do
     ffmpeg -i "$i" -an -vcodec libvpx-vp9 -vf \
       "scale=iw/2*3:-1:flags=lanczos" -crf 31 -b:v 1800k \
-      -quality good -speed 0 ${i:t:r}_mastodon.webm
+      -quality good -speed 0 ${i:t:r}-masto.webm
   done
 }
 
@@ -138,11 +140,11 @@ function mvid_fullsize {
   fi
   for i; do
     ffmpeg -i "$i" -an -vcodec libvpx-vp9 -crf 31 -b:v 1800k \
-      -quality good -speed 0 ${i:t:r}_mastodon_fullsize.webm
+      -quality good -speed 0 ${i:t:r}-masto-full.webm
   done
 }
 
-function smallvid {
+function camconvert {
   if (( # == 0 )); then
     print >&2 "Usage: $0 [file]"
     return 1
@@ -162,8 +164,9 @@ function svid {
     return 1
   fi
   for i; do
-    ffmpeg -y -i "$i" -c:v libx264 -crf 23 -c:a aac -movflags faststart \
-      -maxrate 2M -bufsize 2M ${i:t:r}-small.mp4
+    ffmpeg -y -i "$i" -x264opts opencl -c:v libx264 -crf 23 -c:a aac \
+      -movflags +faststart -tune zerolatency -maxrate 2M -bufsize 2M \
+      ${i:t:r}-small.mp4
   done
 }
 
