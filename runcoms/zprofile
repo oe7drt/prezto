@@ -29,9 +29,9 @@ fi
 
 # BAT_PAGER does not work on OpenBSD right now...
 # (displays nothing at all with this VARIABLE set)
-#if [[ -z "$BAT_PAGER" ]]; then
-#  export BAT_PAGER='less -RF'
-#fi
+if [[ -z "$BAT_PAGER" ]]; then
+ export BAT_PAGER='less -RF'
+fi
 
 #
 # Language
