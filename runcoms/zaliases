@@ -10,6 +10,10 @@ alias ....='cd ../../..'
 alias ducks='du -cks * | sort -rn | head'
 alias confcat="sed -e 's/#.*//;/^\s*$/d' "$@""
 
+alias la='ls -la'
+alias ll='ls -l'
+alias lh='ls -lh'
+
 alias sc='screen -DR Hooray'
 alias dmr='screen -DR DMR'
 alias tm='tmux -u new-session -A -s Eve'
@@ -30,19 +34,18 @@ alias tm='tmux -u new-session -A -s Eve'
 [[ -d ~/sites/oe7drt-website ]] \
 && alias dr='cd ~/sites/oe7drt-website'
 
+alias wallpaper='ls ~/Bilder/backgrounds | fzf --preview="feh --bg-scale ~/Bilder/backgrounds/{}" | xargs -I {} feh --bg-scale ~/Bilder/backgrounds/{}'
+
 # [[ -d /usr/ports ]] \
 # && alias up='cd /usr/ports'
 
+# && alias hs="""hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "/sbin/ifconfig | grep broadcast | head -1 | awk '{ print \$2 }'")"""
 __is_available hugo \
 && function runit { eval $1; } \
-&& alias hs="""hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "/sbin/ifconfig | grep broadcast | head -1 | awk '{ print \$2 }'")"""
+&& alias hs="""hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")"""
 
 __is_available blacklist \
 && alias bl='blacklist -a'
-
-__is_available nvim \
-&& alias vi=nvim \
-&& alias vim=nvim
 
 __is_available X \
 && alias x=startx
@@ -66,16 +69,19 @@ __is_available eza \
   eza --long --color-scale --icons --group-directories-first --git-ignore --git $argv
 }
 
-__is_available lsd \
 # && alias ols='/bin/ls' && alias oll='/bin/ls -l' \
-alias lld='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name' \
+__is_available lsd \
+&& alias lld='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name' \
+&& alias lldg='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,group,size,date,name' \
 && alias lli='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name,inode' \
-&& alias llg='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name,git'
+&& alias llg='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name,git' \
+&& alias llgi='lsd --date=+"%Y-%m-%d %H:%M:%S" --group-dirs=first -v --blocks=permission,user,size,date,name,git,inode'
 # && function ls {
 #   # list directories first and sort by version (1-$name before 10-$name)
 #   lsd --group-directories-first -v $argv
 # }
 
+#&& alias aconf='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 __is_available git && [[ -d ~/.cfg ]] \
 && function aconf {
   git --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
@@ -85,17 +91,14 @@ __is_available lazygit \
 && alias lg='lazygit'
 
 __is_available lazygit && [[ -d ~/.cfg ]] \
-&& function lconf {
-  lazygit --git-dir=$HOME/.cfg/ --work-tree=$HOME $@
-}
+&& alias lconf='lazygit --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
-# __is_available bat \
+__is_available bat \
+&& alias bat="bat --wrap=never"
 # && alias bat="bat --paging always"
 
 __is_available bat \
-&& function batdiff {
-  git diff --name-only --relative --diff-filter=d | xargs bat --diff
-}
+&& alias batdiff='git diff --name-only --relative --diff-filter=d | xargs bat --diff'
 
 function mvidgif-crop {
   if (( # == 0 )); then
@@ -227,9 +230,7 @@ function n {
   neofetch $argv
 }
 
-function r {
-  ranger $argv
-}
+alias r='ranger'
 
 function yl {
   yt-dlp -x --audio-format mp3 --embed-thumbnail $argv

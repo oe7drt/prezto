@@ -18,19 +18,19 @@
 #
 
 if [[ -z "$EDITOR" ]]; then
-  export EDITOR='nvim'
+  export EDITOR='lvim'
 fi
 if [[ -z "$VISUAL" ]]; then
-  export VISUAL='nvim'
+  export VISUAL='lvim'
 fi
 if [[ -z "$PAGER" ]]; then
-  export PAGER='less'
+  export PAGER='less -R'
 fi
 
 # BAT_PAGER does not work on OpenBSD right now...
 # (displays nothing at all with this VARIABLE set)
 if [[ -z "$BAT_PAGER" ]]; then
- export BAT_PAGER='less -RF'
+ export BAT_PAGER='less -R'
 fi
 
 #
@@ -59,6 +59,7 @@ path=(
   $HOME/.cargo/bin(N)
   $HOME/go/bin(N)
   $HOME/.local/share/gem/ruby/3.2/bin(N)
+  $HOME/.local/share/gem/ruby/3.0.0/bin(N)
   $HOME/.yarn/bin(N)
   $HOME/{,s}bin(N)
   $HOME/.local/{,s}bin(N)
@@ -72,8 +73,8 @@ path=(
 [[ -d $HOME/.tmac ]] && export GROFF_TMAC_PATH="$HOME/.tmac"
 
 # OpenBSD snapshots/current...
-# export PKG_PATH="http://mirror.hs-esslingen.de/pub/OpenBSD/snapshots/packages/amd64"
-export PKG_PATH="http://ftp.nluug.nl/OpenBSD/snapshots/packages/amd64"
+export PKG_PATH="http://mirror.hs-esslingen.de/pub/OpenBSD/snapshots/packages/amd64"
+#export PKG_PATH="http://ftp.nluug.nl/OpenBSD/snapshots/packages/amd64"
 export FETCH_CMD="/usr/local/bin/curl -L -s -q -N"
 export CVSROOT="anoncvs@ftp.hostserver.de:/cvs"
 
