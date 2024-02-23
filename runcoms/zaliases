@@ -37,7 +37,7 @@ alias tm='tmux -u new-session -A -s Eve'
 alias wallpaper='ls ~/Bilder/backgrounds | fzf --preview="feh --bg-scale ~/Bilder/backgrounds/{}" | xargs -I {} feh --bg-scale ~/Bilder/backgrounds/{}'
 
 function dvid {
-  echo ffmpeg -i $1 -to $2 -c copy -movflags faststart $3
+  ffmpeg -i $1 -to $2 -c copy -movflags faststart $3
 }
 
 # && alias hs="""hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "/sbin/ifconfig | grep broadcast | head -1 | awk '{ print \$2 }'")"""
