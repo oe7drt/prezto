@@ -41,9 +41,12 @@ function dvid {
 }
 
 # && alias hs="""hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "/sbin/ifconfig | grep broadcast | head -1 | awk '{ print \$2 }'")"""
+# && alias hs="""hugo server -DEF --gc --cleanDestinationDir --noHTTPCache --renderToMemory --disableFastRender --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")"""
+# && alias hs="""hugo server -DEF --gc --cleanDestinationDir --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")"""
 __is_available hugo \
 && function runit { eval $1; } \
-&& alias hs="""hugo server -DEF --gc --cleanDestinationDir --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")"""
+&& alias hs="""hugo server -DEF --gc --cleanDestinationDir --noHTTPCache --renderToMemory --disableFastRender --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")""" \
+&& alias lhs="hugo server -DEF --gc --cleanDestinationDir --noHTTPCache --renderToMemory --disableFastRender --printPathWarnings --logLevel debug --bind 0.0.0.0 --baseURL http://127.0.0.1"
 
 __is_available blacklist \
 && alias bl='blacklist -a'
