@@ -57,6 +57,7 @@ typeset -gU cdpath fpath mailpath path
 path=(
   $HOME/.config/emacs/bin(N)
   $HOME/.cargo/bin(N)
+  $HOME/.rvm/bin(N)
   $HOME/go/bin(N)
   $HOME/.local/share/gem/ruby/3.2/bin(N)
   $HOME/.local/share/gem/ruby/3.0.0/bin(N)
