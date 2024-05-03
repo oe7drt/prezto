@@ -108,6 +108,28 @@ __is_available bat \
 __is_available bat \
 && alias batdiff='git diff --name-only --relative --diff-filter=d | xargs bat --diff'
 
+function nvid {
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
+  for i; do
+    ffmpeg -vaapi_device /dev/dri/renderD128 -i "$i" -c:v libx264 -tune zerolatency -movflags +faststart -b:v 2M -maxrate 4M -bufsize 4M -pass 1 -f null /dev/null
+    ffmpeg -vaapi_device /dev/dri/renderD128 -i "$i" -c:v libx264 -tune zerolatency -movflags +faststart -b:v 2M -maxrate 4M -bufsize 4M -pass 2 ${i:t:r}-recoded.mkv
+  done
+}
+
+function nvidtest {
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file]"
+    return 1
+  fi
+  for i; do
+    ffmpeg -vaapi_device /dev/dri/renderD128 -ss 10:00 -t 10:00 -i "$i" -c:v libx264 -tune zerolatency -movflags +faststart -b:v 2M -maxrate 4M -bufsize 4M -pass 1 -f null /dev/null
+    ffmpeg -vaapi_device /dev/dri/renderD128 -ss 10:00 -t 10:00 -i "$i" -c:v libx264 -tune zerolatency -movflags +faststart -b:v 2M -maxrate 4M -bufsize 4M -pass 2 ${i:t:r}-recoded.mkv
+  done
+}
+
 function mvidgif-crop {
   if (( # == 0 )); then
     print >&2 "Usage: $0 [file]"
