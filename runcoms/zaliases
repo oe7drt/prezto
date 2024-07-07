@@ -49,8 +49,8 @@ function dvid {
 # && alias hs="""hugo server -DEF --gc --cleanDestinationDir --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")"""
 __is_available hugo \
 && function runit { eval $1; } \
-&& alias hs="""hugo server -DEF --gc --cleanDestinationDir --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")""" \
-&& alias lhs="hugo server -DEF --gc --cleanDestinationDir --bind 0.0.0.0 --baseURL http://127.0.0.1"
+&& alias hs="""hugo server -DEF --gc --cleanDestinationDir --disableFastRender --bind 0.0.0.0 --baseURL http://$(runit "ip a | grep "/24" | head -1 | awk '{ print \$2 }' | cut -d/ -f1")""" \
+&& alias lhs="hugo server -DEF --gc --cleanDestinationDir --disableFastRender --bind 0.0.0.0 --baseURL http://127.0.0.1"
 
 __is_available blacklist \
 && alias bl='blacklist -a'
@@ -201,6 +201,18 @@ function svid {
     ffmpeg -y -i "$i" -x264opts opencl -c:v libx264 -crf 23 -c:a aac \
       -movflags +faststart -tune zerolatency -maxrate 2M -bufsize 2M \
       ${i:t:r}-small.mp4
+  done
+}
+
+function webvideo {
+  if (( # == 0 )); then
+    print >&2 "Usage: $0 [file(s)]"
+    return 1
+  fi
+  for i; do
+    ffmpeg -vaapi_device /dev/dri/renderD128 -i "$i" -c:v libx264 -tune zerolatency -movflags +faststart -b:v 2M -maxrate 3M -bufsize 3M -pass 1 -f null /dev/null
+    ffmpeg -vaapi_device /dev/dri/renderD128 -i "$i" -c:v libx264 -tune zerolatency -movflags +faststart -b:v 2M -maxrate 3M -bufsize 3M -pass 2 ${i:t:r}-web.mp4
+    ffmpeg -vaapi_device /dev/dri/renderD128 -i "$i" -c:v libvpx-vp9 -crf 31 -b:v 1800k -quality good -speed 0 -movflags +faststart ${i:t:r}-web.webm
   done
 }
 
